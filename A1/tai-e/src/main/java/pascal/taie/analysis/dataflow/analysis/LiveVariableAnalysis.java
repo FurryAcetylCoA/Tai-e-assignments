@@ -77,7 +77,6 @@ public class LiveVariableAnalysis extends
     public boolean transferNode(Stmt stmt, SetFact<Var> in, SetFact<Var> out) {
         // TODO - finish me // DONE
         // 打断点时注意，这里有多个线程！
-        // 有一个HIDDEN CASE过不了。不确定是什么
         // SetFact大概算是一种Set，只要一个Var在里面， 就算SET了
         // 一个Var不在里面，就算KILL了
         var inNew = out.copy();

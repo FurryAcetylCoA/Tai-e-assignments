@@ -45,6 +45,8 @@ class IterativeSolver<Node, Fact> extends Solver<Node, Fact> {
     protected void doSolveBackward(CFG<Node> cfg, DataflowResult<Node, Fact> result) {
         // 对于LVA，Fact是SetFact<Var>
         // TODO - finish me //DONE
+        // 有一个HIDDEN CASE过不了。不确定是什么
+        // 难不成是有从exit开始的不可达点？
         boolean changed;
         var exit = cfg.getExit();
 
