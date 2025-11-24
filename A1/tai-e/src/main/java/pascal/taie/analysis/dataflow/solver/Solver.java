@@ -85,6 +85,7 @@ public abstract class Solver<Node, Fact> {
         for(Node node: cfg){
             if(cfg.isExit(node)){ // for exit node. Call special init
                 result.setInFact(node,analysis.newBoundaryFact(cfg));
+                result.setOutFact(node,analysis.newInitialFact());
             }else{
                 result.setInFact(node,analysis.newInitialFact());
                 result.setOutFact(node,analysis.newInitialFact());
