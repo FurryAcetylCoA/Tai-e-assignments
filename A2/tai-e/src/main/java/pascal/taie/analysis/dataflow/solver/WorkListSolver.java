@@ -43,9 +43,7 @@ class WorkListSolver<Node, Fact> extends Solver<Node, Fact> {
             var node = WL.removeFirst();
             var IN = result.getInFact(node);
             var preds = cfg.getPredsOf(node);
-            preds.forEach(pred ->{
-                analysis.meetInto(result.getOutFact(pred),IN);
-            });
+            preds.forEach(pred -> analysis.meetInto(result.getOutFact(pred),IN));
             changed = analysis.transferNode(node, result.getInFact(node),result.getOutFact(node));
             if(changed){
                 WL.addAll(cfg.getSuccsOf(node));
