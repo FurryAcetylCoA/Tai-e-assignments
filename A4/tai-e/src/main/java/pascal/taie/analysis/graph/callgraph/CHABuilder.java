@@ -30,9 +30,7 @@ import pascal.taie.language.classes.JClass;
 import pascal.taie.language.classes.JMethod;
 import pascal.taie.language.classes.Subsignature;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of the CHA algorithm.
@@ -59,6 +57,22 @@ class CHABuilder implements CGBuilder<Invoke, JMethod> {
      */
     private Set<JMethod> resolve(Invoke callSite) {
         // TODO - finish me
+        var ret = new HashSet<JMethod>();
+        var method = callSite.getMethodRef();
+        var jclass = method.getDeclaringClass();
+        var subsignature = method.getSubsignature();
+        switch (CallGraphs.getCallKind(callSite)){
+            case STATIC -> {
+                return Collections.singleton(jclass.getDeclaredMethod(subsignature));
+            }
+            case SPECIAL -> {
+                return Collections.singleton(dispatch(jclass, subsignature));
+            }
+            case VIRTUAL,INTERFACE -> {
+
+            }
+        }
+
         return null;
     }
 
@@ -70,6 +84,17 @@ class CHABuilder implements CGBuilder<Invoke, JMethod> {
      */
     private JMethod dispatch(JClass jclass, Subsignature subsignature) {
         // TODO - finish me
-        return null;
+        /* Dispatch (c,m) = m'  ( if c contains non-abstract m' that has the same name and descriptor as m)
+        *                 = Dispatch(super(c), m)
+        */
+        if(jclass == null) return null;
+
+        var method = jclass.getDeclaredMethod(subsignature);
+        if (method != null ) {
+            assert !method.isAbstract() : "子类的这个方法都是抽象的了。父类难道还能是具体的吗（真不知道）";
+            return method;
+        }
+
+        return dispatch(jclass.getSuperClass(), subsignature);
     }
 }
